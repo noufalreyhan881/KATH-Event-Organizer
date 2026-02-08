@@ -63,7 +63,7 @@ export default function BlogPage() {
                 placeholder="Search articles..." 
               />
             </div>
-            <Link href="/admin/blog/create" className="flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-[#a68a2d] hover:bg-[#8c7324] shadow-md shadow-[#a68a2d]/20 transition-all">
+            <Link href="/admin/blog-news/create" className="flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-[#a68a2d] hover:bg-[#8c7324] shadow-md shadow-[#a68a2d]/20 transition-all">
               <span className="mr-2"><PlusIcon /></span>
               Create New Post
             </Link>
