@@ -1,6 +1,6 @@
 import Navbar from "../src/component/navbar";
 import Footer from "../src/component/footer";
-import LatestNews from "../src/component/blog";
+import BlogMainGrid from "../src/component/blog-main-grid";
 import BlogNewsHeader from "../src/component/blog-news-header";
 
 export default function BlogNewsPage() {
@@ -24,9 +24,9 @@ export default function BlogNewsPage() {
           Blog & News.
         </h1>
       </section>
-
+      
       <BlogNewsHeader />
-
+      
       <section className="bg-[#a68a2d] py-16 px-6 md:py-24">
       <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-12">
         
@@ -43,7 +43,7 @@ export default function BlogNewsPage() {
 
       </div>
     </section>
-
+      <BlogMainGrid />
       <Footer />
     </main>
   );

@@ -1,9 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -14,7 +23,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full bg-white border-b border-gray-100 px-6 py-4">
+    <nav className={`sticky top-0 z-50 w-full px-6 py-4 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm' 
+        : 'bg-white border-b border-gray-100'
+    }`}>
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo Section */}
         <div className="text-[#a68a2d] text-4xl font-serif tracking-tight">
@@ -27,9 +40,10 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="text-[#a68a2d] hover:opacity-80 transition-opacity font-medium"
+              className="text-[#a68a2d] font-medium relative group"
             >
               {link.name}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#a68a2d] transition-all duration-300 ease-out group-hover:w-full"></span>
             </a>
           ))}
         </div>
@@ -58,7 +72,7 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="block text-[#a68a2d] font-medium py-2 px-4 hover:bg-gray-50"
+              className="block text-[#a68a2d] font-medium py-2 px-4 hover:bg-gray-50 hover:pl-6 transition-all duration-300"
             >
               {link.name}
             </a>
