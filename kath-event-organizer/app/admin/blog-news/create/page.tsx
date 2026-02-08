@@ -25,7 +25,7 @@ export default function CreateBlogPage() {
     date: new Date().toISOString().split('T')[0], // Default today
     status: 'Draft',
     content: '',
-    image: null as File | null
+    images: [] as File[]
   });
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,16 +44,24 @@ export default function CreateBlogPage() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, image: e.target.files![0] }));
-      if (errors.image) {
+    if (e.target.files && e.target.files.length > 0) {
+      const newFiles = Array.from(e.target.files);
+      setFormData(prev => ({ ...prev, images: [...prev.images, ...newFiles] }));
+      if (errors.images) {
         setErrors(prev => {
           const newErrors = { ...prev };
-          delete newErrors.image;
+          delete newErrors.images;
           return newErrors;
         });
       }
     }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
   };
 
   const validate = () => {
@@ -174,20 +182,39 @@ export default function CreateBlogPage() {
 
                 {/* Featured Image */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured Image</label>
-                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#a68a2d] transition-colors">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Featured Images</label>
+                  <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg transition-colors ${errors.images ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-[#a68a2d]'}`}>
                     <div className="space-y-1 text-center">
                       <div className="mx-auto h-12 w-12 text-gray-400">
                         <UploadIcon />
                       </div>
                       <div className="flex text-sm text-gray-600">
                         <label htmlFor="image-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-[#a68a2d] hover:text-[#8c7324] focus-within:outline-none">
-                          <span>Upload a file</span>
-                          <input id="image-upload" name="image" type="file" className="sr-only" accept="image/*" onChange={handleImageChange} />
+                          <span>Upload files</span>
+                          <input id="image-upload" name="images" type="file" className="sr-only" accept="image/*" multiple onChange={handleImageChange} />
                         </label>
+                        <p className="pl-1">or drag and drop</p>
                       </div>
                       <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
-                      {formData.image && <p className="text-sm text-[#a68a2d] mt-2">{formData.image.name}</p>}
+                      {formData.images.length > 0 && (
+                        <div className="mt-4 text-left">
+                          <p className="text-sm font-medium text-gray-700 mb-2">Selected Files ({formData.images.length}):</p>
+                          <ul className="space-y-2">
+                            {formData.images.map((file, idx) => (
+                              <li key={idx} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded text-sm text-gray-600">
+                                <span className="truncate max-w-xs">{file.name}</span>
+                                <button 
+                                  type="button"
+                                  onClick={() => removeImage(idx)}
+                                  className="text-red-500 hover:text-red-700 ml-2 p-1"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
