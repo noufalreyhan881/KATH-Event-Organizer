@@ -24,7 +24,7 @@ export default function ServicesPage() {
       </h1>
     </section>
 
-    <ServicesGrid /> 
+    <ServicesGrid />
     <Footer />
     </main>
   );

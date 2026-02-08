@@ -14,7 +14,7 @@ export default function Home() {
   <div 
     className="absolute inset-0 z-0 scale-105 animate-soft-zoom"
     style={{
-      backgroundImage: `url('/path-to-your-image_11ac7c.jpg')`,
+      backgroundImage: `url('/KATH_Home_Background.png')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}
@@ -26,41 +26,37 @@ export default function Home() {
   {/* Content Layer */}
   <div className="relative z-10 text-center px-6 max-w-5xl">
     {/* Sub-heading kecil */}
-    <span className="text-[#a68a2d] uppercase tracking-[0.3em] text-sm font-semibold mb-4 block drop-shadow-sm">
-      Luxury Interior Design
+    <span className="text-[#a68a2d] uppercase tracking-[0.3em] text-lg font-semibold mb-4 block drop-shadow-sm text-outline">
+      KATH Event Organizer
     </span>
     
     {/* Main Title */}
-    <h1 className="text-white text-5xl md:text-8xl font-serif mb-8 leading-[1.1] drop-shadow-xl">
-      Elegan Terpancar <br /> 
-      <span className="italic font-light">dalam Detail</span>
+    <h1 className="text-[#a68a2d] text-5xl md:text-8xl font-serif mb-8 leading-[1.1] drop-shadow-xl text-outline">
+      Plan Your<br /> 
+      <span className="italic font-light">Dream Event</span>
     </h1>
     
     {/* Description */}
     <p className="text-white/80 text-base md:text-lg font-light mb-10 max-w-xl mx-auto leading-relaxed italic">
-      "Menghadirkan harmoni antara kemewahan klasik dan fungsionalitas modern untuk ruang hunian Anda."
+      "find vendors that fit your budget"
     </p>
 
     {/* Action Buttons */}
     <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-      <button className="group relative bg-[#a68a2d] text-white px-10 py-4 overflow-hidden transition-all duration-300 hover:bg-[#8e7526]">
+      <button className="border border-white/50 bg-[#a68a2d] hover:bg-[#8e7526] text-white font-medium py-3 px-8 transition-colors duration-300">
         <span className="relative z-10 tracking-[0.2em] uppercase text-xs font-bold">
           Jelajahi Karya
         </span>
       </button>
       
-      <button className="border border-white/50 text-white px-10 py-4 backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-[#a68a2d] tracking-[0.2em] uppercase text-xs font-bold">
+      <button className="border border-white/50 text-white px-10 py-4 backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-[#a68a2d] tracking-[0.2em] uppercase text-xs font-bold focus:outline-none">
         Konsultasi
-      </button>
+      </button>*
     </div>
   </div>
 
   {/* Decorative Elements: Bottom Gradient & Scroll Indicator */}
   <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white via-white/20 to-transparent z-20"></div>
-  
-  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 animate-bounce">
-    <div className="w-[1px] h-12 bg-white/60 mx-auto"></div>
-  </div>
 </section>
 
 <section className="py-20 px-6 bg-[#f3f4f6]">
@@ -70,7 +66,7 @@ export default function Home() {
     <div className="w-full md:w-1/2">
       <div className="relative">
         <img 
-          src="/path-to-your-event-image.jpg" 
+          src="KATH-Logo.png" 
           alt="KATH Event" 
           className="w-full h-auto shadow-2xl"
         />
