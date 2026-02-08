@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import AdminSidebar from '../../src/component/admin/sidebar';
 
@@ -22,6 +22,58 @@ const ImageIcon = () => (
 );
 
 export default function PortfolioPage() {
+  // State untuk data portfolio (simulasi database)
+  const [portfolios, setPortfolios] = useState([
+    {
+      id: 1,
+      title: "Grand Wedding Expo",
+      client: "Cakrawala Univ",
+      date: "20 Feb 2026",
+      categories: ["Wedding", "Exhibition"],
+      description: "Pameran pernikahan terbesar tahun ini dengan 50+ vendor."
+    },
+    {
+      id: 2,
+      title: "Tech Summit 2025",
+      client: "Global Tech",
+      date: "15 Mar 2026",
+      categories: ["Corporate", "Technology"],
+      description: "Konferensi teknologi internasional di Bali Convention Center."
+    },
+    {
+      id: 3,
+      title: "Product Launching",
+      client: "Automotive Co",
+      date: "10 Apr 2026",
+      categories: ["Launch", "Automotive"],
+      description: "Peluncuran eksklusif seri otomotif terbaru."
+    },
+    {
+      id: 4,
+      title: "Music Festival",
+      client: "Sound Live",
+      date: "05 May 2026",
+      categories: ["Concert", "Entertainment"],
+      description: "Festival musik outdoor dengan bintang tamu mancanegara."
+    }
+  ]);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+
+  const handleDeleteClick = (id: number) => {
+    setItemToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete !== null) {
+      setPortfolios(prev => prev.filter(item => item.id !== itemToDelete));
+      setIsDeleteModalOpen(false);
+      setItemToDelete(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f3f4f6] font-sans text-gray-900 flex">
       <AdminSidebar />
@@ -82,41 +134,27 @@ export default function PortfolioPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  <PortfolioRow 
-                    title="Grand Wedding Expo" 
-                    client="Cakrawala Univ" 
-                    date="20 Feb 2026" 
-                    categories={["Wedding", "Exhibition"]}
-                    description="Pameran pernikahan terbesar tahun ini dengan 50+ vendor."
-                  />
-                  <PortfolioRow 
-                    title="Tech Summit 2025" 
-                    client="Global Tech" 
-                    date="15 Mar 2026" 
-                    categories={["Corporate", "Technology"]}
-                    description="Konferensi teknologi internasional di Bali Convention Center."
-                  />
-                  <PortfolioRow 
-                    title="Product Launching" 
-                    client="Automotive Co" 
-                    date="10 Apr 2026" 
-                    categories={["Launch", "Automotive"]}
-                    description="Peluncuran eksklusif seri otomotif terbaru."
-                  />
-                  <PortfolioRow 
-                    title="Music Festival" 
-                    client="Sound Live" 
-                    date="05 May 2026" 
-                    categories={["Concert", "Entertainment"]}
-                    description="Festival musik outdoor dengan bintang tamu mancanegara."
-                  />
+                  {portfolios.map((portfolio) => (
+                    <PortfolioRow 
+                      key={portfolio.id}
+                      {...portfolio}
+                      onDelete={() => handleDeleteClick(portfolio.id)}
+                    />
+                  ))}
+                  {portfolios.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                        No projects found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
 
             <div className="bg-white px-6 py-4 border-t border-gray-100 flex items-center justify-between">
               <span className="text-sm text-gray-500">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">4</span> of <span className="font-medium">12</span> results
+                Showing <span className="font-medium">1</span> to <span className="font-medium">{portfolios.length}</span> of <span className="font-medium">{portfolios.length}</span> results
               </span>
               <div className="flex gap-2">
                 <button className="px-3 py-1 border border-gray-200 rounded text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50">Previous</button>
@@ -125,12 +163,45 @@ export default function PortfolioPage() {
             </div>
           </div>
         </main>
+
+        {/* Delete Confirmation Modal */}
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform transition-all scale-100 animate-in fade-in zoom-in duration-200">
+              <div className="text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Project?</h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  Are you sure you want to delete this project? This action cannot be undone.
+                </p>
+                <div className="flex justify-center gap-3">
+                  <button 
+                    onClick={() => setIsDeleteModalOpen(false)}
+                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={confirmDelete}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors shadow-md shadow-red-600/20"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function PortfolioRow({ title, client, date, categories, description }: { title: string, client: string, date: string, categories: string[], description: string }) {
+function PortfolioRow({ id, title, client, date, categories, description, onDelete }: { id: number, title: string, client: string, date: string, categories: string[], description: string, onDelete: () => void }) {
   return (
     <tr className="hover:bg-gray-50 transition-colors group">
       <td className="px-6 py-4">
@@ -155,10 +226,10 @@ function PortfolioRow({ title, client, date, categories, description }: { title:
       <td className="px-6 py-4 text-gray-500 text-sm max-w-xs truncate">{description}</td>
       <td className="px-6 py-4 text-right">
         <div className="flex items-center justify-end gap-2">
-          <button className="p-1.5 text-gray-500 hover:text-[#a68a2d] transition-colors rounded hover:bg-[#a68a2d]/10" title="Edit">
+          <Link href={`/admin/portofolios/edit/${id}`} className="p-1.5 text-gray-500 hover:text-[#a68a2d] transition-colors rounded hover:bg-[#a68a2d]/10" title="Edit">
             <EditIcon />
-          </button>
-          <button className="p-1.5 text-gray-500 hover:text-red-600 transition-colors rounded hover:bg-red-50" title="Delete">
+          </Link>
+          <button onClick={onDelete} className="p-1.5 text-gray-500 hover:text-red-600 transition-colors rounded hover:bg-red-50" title="Delete">
             <TrashIcon />
           </button>
         </div>
