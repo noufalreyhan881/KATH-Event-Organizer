@@ -25,12 +25,8 @@ export default function ServicesPage() {
       </h1>
     </section>
 
-<<<<<<< HEAD
-    <ServicesGrid />
-=======
     <ServicesGrid /> 
     <CTASection />
->>>>>>> 344831556ad8e94bace92895de06c29a01f4d9de
     <Footer />
     </main>
   );
