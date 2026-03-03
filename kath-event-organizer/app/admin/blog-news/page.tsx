@@ -1,26 +1,26 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import Navbar from "../../src/component/navbar";
 import Footer from "../../src/component/footer";
 
-async function deleteArticle(formData: FormData) {
-  "use server";
-  const id = formData.get("id") as string;
-  if (!id) return;
+const staticArticles = [
+  {
+    id: '1',
+    title: 'Introducing KATH Event Organizer',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    title: 'Top 5 Event Trends for 2024',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: '3',
+    title: 'How to Choose the Perfect Venue',
+    createdAt: new Date().toISOString(),
+  },
+];
 
-  await prisma.article.delete({
-    where: { id },
-  });
-
-  revalidatePath("/admin/blog-news");
-}
-
-export default async function AdminBlogNewsPage() {
-  const articles = await prisma.article.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-
+export default function AdminBlogNewsPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <Navbar />
@@ -51,7 +51,7 @@ export default async function AdminBlogNewsPage() {
               </tr>
             </thead>
             <tbody>
-              {articles.map((article) => (
+              {staticArticles.map((article) => (
                 <tr key={article.id} className="hover:bg-gray-50">
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <p className="text-gray-900 font-medium">{article.title}</p>
@@ -68,7 +68,7 @@ export default async function AdminBlogNewsPage() {
                     >
                       Edit
                     </Link>
-                    <form action={deleteArticle} className="inline ml-4">
+                    <form className="inline ml-4">
                       <input type="hidden" name="id" value={article.id} />
                       <button type="submit" className="text-red-600 hover:text-red-900 font-medium">
                         Hapus
