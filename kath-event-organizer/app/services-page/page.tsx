@@ -1,6 +1,7 @@
 import Navbar from "../src/component/navbar";
 import Footer from "../src/component/footer";
 import ServicesGrid from "../src/component/services-grid";
+import CTASection from "../src/component/cta-section";
 
 export default function ServicesPage() {
   return (
@@ -24,7 +25,12 @@ export default function ServicesPage() {
       </h1>
     </section>
 
+<<<<<<< HEAD
     <ServicesGrid />
+=======
+    <ServicesGrid /> 
+    <CTASection />
+>>>>>>> 344831556ad8e94bace92895de06c29a01f4d9de
     <Footer />
     </main>
   );
