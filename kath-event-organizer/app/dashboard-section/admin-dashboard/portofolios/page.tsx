@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import AdminSidebar from '../../src/component/admin/sidebar';
+import AdminSidebar from '../../../src/component/admin/sidebar';
 
 // Icons
 const PlusIcon = () => (

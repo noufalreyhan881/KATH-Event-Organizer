@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import AdminSidebar from '../../../src/component/admin/sidebar';
+import AdminSidebar from '../../../../src/component/admin/sidebar';
 
 // Icons
 const ArrowLeftIcon = () => (
