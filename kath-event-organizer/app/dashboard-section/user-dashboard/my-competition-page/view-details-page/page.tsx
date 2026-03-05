@@ -60,99 +60,118 @@ export default function CompetitionDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6] font-sans text-gray-900 flex">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex">
       <UserSidebar />
       
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <UserHeader />
 
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          {/* Back Button */}
-          <div className="mb-6">
-            <Link href="/dashboard-section/user-dashboard/my-competition-page" className="inline-flex items-center text-sm text-gray-500 hover:text-[#a68a2d] transition-colors">
-              <span className="mr-2"><ArrowLeftIcon /></span>
-              Back to My Competitions
-            </Link>
-          </div>
-
-          {/* Header Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 mb-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                    {competition.category}
-                  </span>
-                  <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                    {competition.status}
-                  </span>
-                </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{competition.name}</h1>
-                <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <CalendarIcon />
-                    <span>Deadline: 20 Feb 2026</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MapPinIcon />
-                    <span>{competition.location}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <button 
-                onClick={handleOpenModal}
-                className="px-6 py-2.5 bg-[#a68a2d] hover:bg-[#8c7324] text-white font-medium rounded-lg shadow-md shadow-[#a68a2d]/20 transition-all"
-              >
-                Submit Project
-              </button>
+        <main className="flex-1 overflow-y-auto p-6 md:p-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Back Button */}
+            <div className="mb-8">
+              <Link href="/dashboard-section/user-dashboard/my-competition-page" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                <ArrowLeftIcon />
+                <span className="ml-2">Back to My Competitions</span>
+              </Link>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column: Details */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {/* Description */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">About Competition</h3>
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  {competition.description}
-                </p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column: Main Content */}
+              <div className="lg:col-span-2 space-y-8">
                 
-                <h4 className="font-bold text-gray-900 mb-3">Requirements</h4>
-                <ul className="list-disc list-inside text-sm text-gray-600 space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-100">
-                  {competition.requirements.map((req, idx) => (
-                    <li key={idx}>{req}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Right Column: Timeline & Info */}
-            <div className="space-y-6">
-              
-              {/* Timeline */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Timeline</h3>
-                <div className="space-y-6 relative before:absolute before:inset-y-0 before:left-[9px] before:w-0.5 before:bg-gray-200">
-                  {competition.timeline.map((item, index) => (
-                    <div key={index} className="relative pl-8">
-                      <div className={`absolute left-0 top-1.5 w-5 h-5 rounded-full border-2 ${item.completed ? 'bg-[#a68a2d] border-[#a68a2d]' : 'bg-white border-gray-300'} z-10`}></div>
-                      <h4 className={`text-sm font-semibold ${item.completed ? 'text-[#a68a2d]' : 'text-gray-900'}`}>{item.title}</h4>
-                      <p className="text-xs text-gray-500 mt-0.5">{item.date}</p>
+                {/* Header Card */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    <span className="bg-blue-50 text-blue-700 border border-blue-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                      {competition.category}
+                    </span>
+                    <span className="bg-amber-50 text-amber-700 border border-amber-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                      {competition.status}
+                    </span>
+                  </div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">{competition.name}</h1>
+                  
+                  <div className="flex flex-wrap gap-6 text-sm text-gray-500 border-t border-gray-100 pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gray-50 rounded-lg text-gray-700"><CalendarIcon /></div>
+                      <div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Deadline</p>
+                        <p className="font-bold text-gray-900">20 Feb 2026</p>
+                      </div>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gray-50 rounded-lg text-gray-700"><MapPinIcon /></div>
+                      <div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Location</p>
+                        <p className="font-bold text-gray-900">{competition.location}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description & Requirements */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">About Competition</h3>
+                  <p className="text-gray-600 leading-relaxed mb-8 text-lg">
+                    {competition.description}
+                  </p>
+                  
+                  <h4 className="font-bold text-gray-900 mb-4 text-lg">Requirements</h4>
+                  <ul className="space-y-3">
+                    {competition.requirements.map((req, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-gray-600">
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-gray-400 flex-shrink-0"></span>
+                        <span className="leading-relaxed">{req}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              {/* Organizer Info */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-sm font-bold text-gray-500 uppercase mb-3">Organizer</h3>
-                <p className="font-bold text-gray-900 text-lg">{competition.organizer}</p>
-                <p className="text-xs text-green-600 mt-1 flex items-center gap-1">✓ Official Verified Account</p>
-              </div>
+              {/* Right Column: Sidebar */}
+              <div className="space-y-6">
+                {/* Action Card */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-6">
+                  <h3 className="font-bold text-gray-900 mb-2">Ready to Submit?</h3>
+                  <p className="text-sm text-gray-500 mb-6">Make sure you have checked all requirements before submitting your work.</p>
+                  <button 
+                    onClick={handleOpenModal}
+                    className="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/10 transition-all flex items-center justify-center gap-2"
+                  >
+                    <UploadCloudIcon />
+                    Submit Project
+                  </button>
+                </div>
 
+                {/* Timeline */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                  <h3 className="font-bold text-gray-900 mb-6">Timeline</h3>
+                  <div className="relative pl-2">
+                    <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-100"></div>
+                    <div className="space-y-8">
+                      {competition.timeline.map((item, index) => (
+                        <div key={index} className="relative pl-8 group">
+                          <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 z-10 transition-colors ${item.completed ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
+                          <h4 className={`text-sm font-bold ${item.completed ? 'text-gray-900' : 'text-gray-500'}`}>{item.title}</h4>
+                          <p className="text-xs text-gray-400 mt-1 font-medium">{item.date}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Organizer Info */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex items-center gap-4">
+                  <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-500 text-lg">
+                    {competition.organizer.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">Organizer</p>
+                    <p className="font-bold text-gray-900">{competition.organizer}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>
@@ -160,41 +179,41 @@ export default function CompetitionDetailPage() {
 
       {/* Submit Project Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900">Submit Project</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-100 transition-all">
+            <div className="flex justify-between items-center p-8 border-b border-gray-100">
+              <h3 className="text-xl font-bold text-gray-900">Submit Project</h3>
               <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <XIcon />
               </button>
             </div>
             
-            <form onSubmit={handleSubmitProject} className="p-6">
+            <form onSubmit={handleSubmitProject} className="p-8">
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Upload Submission (PDF)</label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors cursor-pointer group">
-                  <div className="p-3 bg-gray-100 rounded-full mb-3 text-gray-500 group-hover:bg-white group-hover:text-[#a68a2d] transition-colors">
+                <label className="block text-sm font-bold text-gray-900 mb-3">Upload Submission (PDF)</label>
+                <div className="border-2 border-dashed border-gray-200 rounded-xl p-10 flex flex-col items-center justify-center text-center hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer group">
+                  <div className="p-4 bg-gray-50 rounded-full mb-4 text-gray-400 group-hover:bg-white group-hover:text-gray-900 transition-colors shadow-sm">
                     <UploadCloudIcon />
                   </div>
-                  <p className="text-sm font-medium text-gray-900">Click to upload or drag and drop</p>
+                  <p className="text-sm font-bold text-gray-900">Click to upload or drag and drop</p>
                   <p className="text-xs text-gray-500 mt-1">PDF only (Max. 10MB)</p>
                   <input type="file" accept=".pdf" className="hidden" />
                 </div>
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Additional Notes (Optional)</label>
+                <label className="block text-sm font-bold text-gray-900 mb-3">Additional Notes <span className="text-gray-400 font-normal">(Optional)</span></label>
                 <textarea 
-                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-[#a68a2d] focus:bg-white focus:ring-2 focus:ring-[#a68a2d]/20 outline-none transition-all resize-none h-24"
+                  className="w-full px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-gray-900 focus:bg-white focus:ring-0 outline-none transition-all resize-none h-32 font-medium"
                   placeholder="Add any comments or links here..."
                 ></textarea>
               </div>
 
-              <div className="flex gap-3">
-                <button type="button" onClick={handleCloseModal} className="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="flex gap-4">
+                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors">
                   Cancel
                 </button>
-                <button type="submit" className="flex-1 px-4 py-2.5 bg-[#a68a2d] hover:bg-[#8c7324] text-white font-medium rounded-lg shadow-md shadow-[#a68a2d]/20 transition-colors">
+                <button type="submit" className="flex-1 px-6 py-3 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/20 transition-all">
                   Submit
                 </button>
               </div>

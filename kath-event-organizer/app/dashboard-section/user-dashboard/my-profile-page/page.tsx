@@ -28,6 +28,9 @@ const GlobeIcon = () => (
 const HistoryIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
 );
+const CalendarIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+);
 
 export default function MyProfilePage() {
   // Mock User Data
@@ -50,96 +53,134 @@ export default function MyProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6] font-sans text-gray-900 flex">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex">
       <UserSidebar />
       
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <UserHeader />
 
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="max-w-4xl mx-auto">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10">
+          <div className="max-w-5xl mx-auto">
             
             {/* Profile Header Card */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-              <div className="h-32 bg-gradient-to-r from-[#a68a2d] to-[#d4b04c]"></div>
-              <div className="px-6 pb-6 relative">
-                <div className="flex flex-col md:flex-row items-start md:items-end -mt-12 mb-4 gap-4">
-                  <div className="h-24 w-24 rounded-full bg-white p-1 shadow-md">
-                    <div className="h-full w-full rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500">
-                      FS
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+              <div className="h-40 bg-gray-900 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800"></div>
+                {/* Decorative circle */}
+                <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/5 blur-3xl"></div>
+              </div>
+              
+              <div className="px-8 pb-8">
+                <div className="flex flex-col md:flex-row items-end -mt-12 mb-6 gap-6">
+                  <div className="h-28 w-28 rounded-2xl bg-white p-1.5 shadow-xl rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <div className="h-full w-full rounded-xl bg-gray-100 flex items-center justify-center text-3xl font-bold text-gray-400">
+                      {user.name.charAt(0)}
                     </div>
                   </div>
-                  <div className="flex-1 pt-2 md:pt-0">
-                    <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-                    <p className="text-gray-500">{user.role}</p>
+                  
+                  <div className="flex-1 pb-1">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-1">{user.name}</h1>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                      <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">{user.role}</span>
+                      <span className="flex items-center gap-1"><MapPinIcon /> {user.location}</span>
+                      <span className="flex items-center gap-1"><SchoolIcon /> {user.university}</span>
+                    </div>
                   </div>
-                  <div className="flex gap-3 mt-4 md:mt-0">
-                    <Link href="/dashboard-section/user-dashboard/competition-history" className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
+
+                  <div className="flex gap-3 mb-1 w-full md:w-auto">
+                    <Link href="/dashboard-section/user-dashboard/competition-history" className="flex-1 md:flex-none justify-center flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
                       <HistoryIcon />
                       History
                     </Link>
-                    <Link href="/dashboard-section/user-dashboard/my-profile-page/edit-profile-page" className="flex items-center gap-2 px-4 py-2 bg-[#a68a2d] border border-transparent rounded-lg text-sm font-medium text-white hover:bg-[#8c7324] transition-colors shadow-sm">
+                    <Link href="/dashboard-section/user-dashboard/my-profile-page/edit-profile-page" className="flex-1 md:flex-none justify-center flex items-center gap-2 px-5 py-2.5 bg-gray-900 border border-transparent rounded-xl text-sm font-bold text-white hover:bg-black transition-colors shadow-lg shadow-gray-900/20">
                       <EditIcon />
                       Edit Profile
                     </Link>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 border-t border-gray-100 pt-6">
-                  <div className="text-center">
-                    <span className="block text-2xl font-bold text-[#a68a2d]">{user.stats.competitions}</span>
-                    <span className="text-sm text-gray-500">Competitions</span>
+                <div className="grid grid-cols-3 gap-4 border-t border-gray-100 pt-6">
+                  <div className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                    <span className="block text-3xl font-bold text-gray-900 mb-1">{user.stats.competitions}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Competitions</span>
                   </div>
-                  <div className="text-center border-l border-r border-gray-100">
-                    <span className="block text-2xl font-bold text-[#a68a2d]">{user.stats.wins}</span>
-                    <span className="text-sm text-gray-500">Wins</span>
+                  <div className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors border-l border-r border-gray-100">
+                    <span className="block text-3xl font-bold text-gray-900 mb-1">{user.stats.wins}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Wins</span>
                   </div>
-                  <div className="text-center">
-                    <span className="block text-2xl font-bold text-[#a68a2d]">{user.stats.certificates}</span>
-                    <span className="text-sm text-gray-500">Certificates</span>
+                  <div className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                    <span className="block text-3xl font-bold text-gray-900 mb-1">{user.stats.certificates}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Certificates</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               
-              {/* About Section */}
-              <div className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">About Me</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {user.bio}
-                </p>
+              {/* Contact Info (Left Column) */}
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                  <h3 className="font-bold text-gray-900 mb-6 text-lg">Contact Information</h3>
+                  <div className="space-y-5">
+                    <div className="flex items-center gap-4 group">
+                      <div className="h-10 w-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                        <MailIcon />
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Email</p>
+                        <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 group">
+                      <div className="h-10 w-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-green-50 group-hover:text-green-600 transition-colors">
+                        <PhoneIcon />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Phone</p>
+                        <p className="text-sm font-medium text-gray-900">{user.phone}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 group">
+                      <div className="h-10 w-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-700 transition-colors">
+                        <LinkedinIcon />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">LinkedIn</p>
+                        <a href={`https://${user.linkedin}`} target="_blank" rel="noreferrer" className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">{user.linkedin}</a>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 group">
+                      <div className="h-10 w-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
+                        <GlobeIcon />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Website</p>
+                        <a href={`https://${user.website}`} target="_blank" rel="noreferrer" className="text-sm font-medium text-gray-900 hover:text-purple-600 transition-colors">{user.website}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Contact Info */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Contact Info</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <MailIcon />
-                    <span className="text-sm">{user.email}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <PhoneIcon />
-                    <span className="text-sm">{user.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <SchoolIcon />
-                    <span className="text-sm">{user.university}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <MapPinIcon />
-                    <span className="text-sm">{user.location}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <LinkedinIcon />
-                    <a href={`https://${user.linkedin}`} target="_blank" rel="noreferrer" className="text-sm hover:text-[#a68a2d] transition-colors">{user.linkedin}</a>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600">
-                    <GlobeIcon />
-                    <a href={`https://${user.website}`} target="_blank" rel="noreferrer" className="text-sm hover:text-[#a68a2d] transition-colors">{user.website}</a>
+              {/* About Section (Right Column) */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                  <h3 className="font-bold text-gray-900 mb-4 text-lg">About Me</h3>
+                  <p className="text-gray-600 leading-relaxed text-lg">
+                    {user.bio}
+                  </p>
+                  
+                  <div className="mt-8 pt-8 border-t border-gray-100">
+                    <h4 className="font-bold text-gray-900 mb-4">Joined Since</h4>
+                    <div className="flex items-center gap-2 text-gray-600 bg-gray-50 w-fit px-4 py-2 rounded-lg">
+                      <CalendarIcon />
+                      <span>{user.joined}</span>
+                    </div>
                   </div>
                 </div>
               </div>
