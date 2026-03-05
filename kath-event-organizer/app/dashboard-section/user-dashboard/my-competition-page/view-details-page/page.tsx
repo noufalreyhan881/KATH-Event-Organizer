@@ -21,9 +21,17 @@ const UploadCloudIcon = () => (
 const XIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 );
+const UsersIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+);
+const SearchIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+);
 
 export default function CompetitionDetailPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTeamsModalOpen, setIsTeamsModalOpen] = useState(false);
+  const [teamSearchQuery, setTeamSearchQuery] = useState('');
 
   // Mock Data Lookup (Simulasi data statis untuk demo)
   const competition = {
@@ -48,6 +56,18 @@ export default function CompetitionDetailPage() {
       "Original work only, no plagiarism."
     ]
   };
+
+  const participantTeams = [
+    { id: 1, name: "KATH Creative", members: ["Ferry S", "Jane Doe", "Alex M"], avatarColor: "bg-[#a68a2d]" },
+    { id: 2, name: "Design Wizards", members: ["Bob Smith", "Alice W"], avatarColor: "bg-blue-600" },
+    { id: 3, name: "Pixel Perfect", members: ["Charlie B", "David L", "Eve K"], avatarColor: "bg-purple-600" },
+    { id: 4, name: "UI Masters", members: ["Grace H", "Henry J"], avatarColor: "bg-green-600" },
+  ];
+
+  // Filter teams based on search
+  const filteredTeams = participantTeams.filter(team => 
+    team.name.toLowerCase().includes(teamSearchQuery.toLowerCase())
+  );
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -161,6 +181,53 @@ export default function CompetitionDetailPage() {
                   </div>
                 </div>
 
+                {/* Participant Teams Section (Moved to Sidebar) */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-[#a68a2d]/10 text-[#a68a2d] rounded-lg">
+                        <UsersIcon />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-900">Participant Teams</h3>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">{participantTeams.length} Teams Registered</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setIsTeamsModalOpen(true)}
+                      className="text-[10px] font-bold text-[#a68a2d] uppercase tracking-widest hover:underline transition-all"
+                    >
+                      See All
+                    </button>
+                  </div>
+
+                  <div className="relative mb-6">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                      <SearchIcon />
+                    </div>
+                    <input 
+                      type="text"
+                      placeholder="Find a team..."
+                      value={teamSearchQuery}
+                      onChange={(e) => setTeamSearchQuery(e.target.value)}
+                      className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#a68a2d]/20 focus:border-[#a68a2d] transition-all w-full"
+                    />
+                  </div>
+                  
+                  <div className="divide-y divide-gray-100 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    {filteredTeams.map((team) => (
+                      <div key={team.id} className="py-3 group">
+                        <h4 className="font-medium text-gray-600 group-hover:text-[#a68a2d] transition-colors text-sm truncate">
+                          {team.name}
+                        </h4>
+                      </div>
+                    ))}
+                    {filteredTeams.length === 0 && (
+                      <p className="text-[10px] text-center py-4 font-bold text-gray-400 uppercase tracking-widest">No teams found</p>
+                    )}
+                  </div>
+                </div>
+
                 {/* Organizer Info */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex items-center gap-4">
                   <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-500 text-lg">
@@ -218,6 +285,59 @@ export default function CompetitionDetailPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Participant Directory Modal */}
+      {isTeamsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform scale-100 transition-all">
+            <div className="flex justify-between items-center p-8 border-b border-gray-100">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Participant Directory</h3>
+                <p className="text-sm text-gray-400 font-medium mt-1">Full list of teams competing in this event</p>
+              </div>
+              <button onClick={() => setIsTeamsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <XIcon />
+              </button>
+            </div>
+            
+            <div className="p-8 max-h-[60vh] overflow-y-auto custom-scrollbar">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {participantTeams.map((team) => (
+                  <div key={team.id} className="p-5 rounded-2xl border border-gray-100 bg-gray-50/30 hover:bg-white hover:shadow-lg hover:shadow-gray-200/40 transition-all group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-bold text-gray-900 group-hover:text-[#a68a2d] transition-colors text-base">{team.name}</h4>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Leader: {team.members[0]}</p>
+                      </div>
+                      <span className="bg-white px-2 py-1 rounded-md border border-gray-100 text-[9px] font-bold text-gray-500 uppercase">
+                        {team.members.length} Members
+                      </span>
+                    </div>
+                    
+                    <div className="flex -space-x-2 overflow-hidden">
+                      {team.members.map((member, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`inline-block h-7 w-7 rounded-full ring-2 ring-white ${team.avatarColor} flex items-center justify-center text-[9px] font-bold text-white shadow-sm`}
+                          title={member}
+                        >
+                          {member.split(' ').map(n => n[0]).join('')}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-6 bg-gray-50 border-t border-gray-100 text-center">
+              <button onClick={() => setIsTeamsModalOpen(false)} className="px-8 py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all text-sm">
+                Close Directory
+              </button>
+            </div>
           </div>
         </div>
       )}
