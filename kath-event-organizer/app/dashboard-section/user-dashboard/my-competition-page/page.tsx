@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import UserSidebar from '../../../src/component/user/sidebar';
 import UserHeader from '../../../src/component/user/header';
@@ -17,7 +19,47 @@ const ArrowRightIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 );
 
+// Breadcrumb Component untuk navigasi logis
+const Breadcrumbs = () => (
+  <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center">
+    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d]">Dashboard</Link>
+    <span>/</span>
+    <span className="text-gray-900 font-medium">My Competitions</span>
+  </nav>
+);
+
+// Skeleton Loader Component untuk Grid Kompetisi
+const CompetitionSkeleton = () => (
+  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col h-full overflow-hidden">
+    <div className="h-40 w-full bg-gray-200 animate-pulse" />
+    <div className="p-6 flex-1 flex flex-col">
+      <div className="flex justify-between items-start mb-4">
+        <div className="w-16 h-6 bg-gray-100 animate-pulse rounded-md" />
+        <div className="w-20 h-6 bg-gray-100 animate-pulse rounded-full" />
+      </div>
+      <div className="space-y-2 mb-4">
+        <div className="w-full h-6 bg-gray-100 animate-pulse rounded" />
+        <div className="w-3/4 h-6 bg-gray-100 animate-pulse rounded" />
+      </div>
+      <div className="w-1/2 h-4 bg-gray-50 animate-pulse rounded mb-6" />
+      <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
+        <div className="w-24 h-4 bg-gray-50 animate-pulse rounded" />
+        <div className="h-8 w-8 rounded-full bg-gray-50 animate-pulse" />
+      </div>
+    </div>
+  </div>
+);
+
 export default function MyCompetitionPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [filterTab, setFilterTab] = useState<'active' | 'past'>('active');
+
+  useEffect(() => {
+    // Simulasi loading data selama 1.5 detik
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const competitions = [
     {
       id: 1,
@@ -57,6 +99,10 @@ export default function MyCompetitionPage() {
     }
   ];
 
+  const filteredCompetitions = competitions.filter(comp => 
+    filterTab === 'active' ? comp.status !== 'Finished' : comp.status === 'Finished'
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex">
       <UserSidebar />
@@ -66,13 +112,20 @@ export default function MyCompetitionPage() {
 
         <main className="flex-1 overflow-y-auto p-6 md:p-10">
           <div className="max-w-6xl mx-auto">
+            <Breadcrumbs />
             <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">My Competitions</h1>
                 <p className="text-gray-500 mt-2">Track your progress and manage your event participations.</p>
               </div>
               
-              <div className="flex gap-3 w-full md:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <Link 
+                  href="/events" 
+                  className="bg-[#a68a2d] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#8e7526] transition-all text-center shadow-lg shadow-[#a68a2d]/20"
+                >
+                  + Join New Event
+                </Link>
                 <div className="relative flex-1 md:w-72">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                     <SearchIcon />
@@ -89,10 +142,42 @@ export default function MyCompetitionPage() {
               </div>
             </div>
 
+            {/* Tabs for better organization */}
+            <div className="flex gap-8 border-b border-gray-200 mb-8">
+              <button 
+                onClick={() => setFilterTab('active')}
+                className={`pb-4 text-sm font-bold uppercase tracking-wider transition-all ${filterTab === 'active' ? 'border-b-2 border-[#a68a2d] text-[#a68a2d]' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Active Events ({competitions.filter(c => c.status !== 'Finished').length})
+              </button>
+              <button 
+                onClick={() => setFilterTab('past')}
+                className={`pb-4 text-sm font-bold uppercase tracking-wider transition-all ${filterTab === 'past' ? 'border-b-2 border-[#a68a2d] text-[#a68a2d]' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Past Events ({competitions.filter(c => c.status === 'Finished').length})
+              </button>
+            </div>
+
             {/* Grid List */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {competitions.map((comp) => (
-                <div key={comp.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
+              {isLoading ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                  <CompetitionSkeleton key={index} />
+                ))
+              ) : filteredCompetitions.length === 0 ? (
+                <div className="col-span-full py-20 text-center bg-white rounded-2xl border border-dashed border-gray-300">
+                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CalendarIcon />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">No competitions joined yet</h3>
+                  <p className="text-gray-500 mb-6">Explore our latest events and start your journey.</p>
+                  <Link href="/events" className="text-[#a68a2d] font-bold hover:underline">
+                    Browse Events
+                  </Link>
+                </div>
+              ) : (
+                filteredCompetitions.map((comp) => (
+                <Link href="/dashboard-section/user-dashboard/my-competition-page/view-details-page" key={comp.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col h-full overflow-hidden">
                   <div className={`h-40 w-full ${comp.image} flex items-center justify-center rounded-t-2xl relative overflow-hidden`}>
                     <div className="absolute inset-0 opacity-10 bg-current"></div>
                     <span className="font-bold text-lg opacity-80">{comp.category}</span>
@@ -113,13 +198,14 @@ export default function MyCompetitionPage() {
                         <span className="ml-2">{comp.date}</span>
                       </div>
 
-                      <Link href="/dashboard-section/user-dashboard/my-competition-page/view-details-page" className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition-all">
+                      <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-50 text-gray-400 group-hover:bg-gray-900 group-hover:text-white transition-all">
                         <ArrowRightIcon />
-                      </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                </Link>
+                ))
+              )}
             </div>
           </div>
         </main>

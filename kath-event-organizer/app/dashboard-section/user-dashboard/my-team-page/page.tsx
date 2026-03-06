@@ -34,11 +34,24 @@ const AlertTriangleIcon = () => (
 const SettingsIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
 );
+const RefreshIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+);
+
+// Breadcrumb Component
+const Breadcrumbs = () => (
+  <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center font-medium">
+    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
+    <span>/</span>
+    <span className="text-gray-900">My Team</span>
+  </nav>
+);
 
 export default function MyTeamPage() {
   const router = useRouter();
   // Mock Data: User sudah punya tim
   const [hasTeam, setHasTeam] = useState(true);
+  const [copied, setCopied] = useState(false);
   const [team, setTeam] = useState({
     name: "Pixel Pioneers",
     code: "PXL-8829",
@@ -66,6 +79,7 @@ export default function MyTeamPage() {
   // Invite Modal State
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteSuccess, setInviteSuccess] = useState(false);
 
   const openModal = (title: string, message: string, confirmText: string, action: () => void, type: 'danger' | 'warning' = 'danger') => {
     setModalConfig({ title, message, confirmText, confirmAction: action, type });
@@ -76,19 +90,35 @@ export default function MyTeamPage() {
     setModalOpen(false);
   };
 
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(team.code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const handleConfirm = () => {
     modalConfig.confirmAction();
     closeModal();
   };
 
   const handleLeaveTeam = () => {
-    openModal(
-      "Leave Team",
-      "Are you sure you want to leave this team? You will need to join or create a new team to participate.",
-      "Leave Team",
-      () => setHasTeam(false),
-      'danger'
-    );
+    if (currentUser.role === 'Leader' && team.members.length > 1) {
+      openModal(
+        "Action Required",
+        "As a leader, you must promote another member to Leader before leaving the team.",
+        "Got it",
+        () => {},
+        'warning'
+      );
+    } else {
+      openModal(
+        "Leave Team",
+        "Are you sure you want to leave this team? You will need to join or create a new team to participate.",
+        "Leave Team",
+        () => setHasTeam(false),
+        'danger'
+      );
+    }
   };
 
   const handleKickMember = (id: number, name: string) => {
@@ -123,9 +153,12 @@ export default function MyTeamPage() {
 
   const handleSendInvite = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Invitation sent to ${inviteEmail}`);
-    setInviteModalOpen(false);
-    setInviteEmail('');
+    setInviteSuccess(true);
+    setTimeout(() => {
+      setInviteSuccess(false);
+      setInviteModalOpen(false);
+      setInviteEmail('');
+    }, 1500);
   };
 
   return (
@@ -137,6 +170,7 @@ export default function MyTeamPage() {
 
         <main className="flex-1 overflow-y-auto p-6 md:p-10">
           <div className="max-w-6xl mx-auto">
+            <Breadcrumbs />
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">My Team</h1>
@@ -168,11 +202,11 @@ export default function MyTeamPage() {
                       <div className="flex items-center justify-between">
                         <span className="text-xl font-mono font-bold text-gray-900 tracking-wider">{team.code}</span>
                         <button 
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          onClick={() => alert('Code copied!')}
+                          className={`p-2 rounded-lg transition-all ${copied ? 'text-green-600 bg-green-50' : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'}`}
+                          onClick={handleCopyCode}
                           title="Copy Code"
                         >
-                          <CopyIcon />
+                          {copied ? <span className="text-[10px] font-bold uppercase">Copied!</span> : <CopyIcon />}
                         </button>
                       </div>
                     </div>
@@ -205,9 +239,9 @@ export default function MyTeamPage() {
                     </div>
                     <div className="divide-y divide-gray-100">
                       {team.members.map((member) => (
-                        <div key={member.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-gray-50/50 transition-colors group gap-4">
+                        <div key={member.id} className={`p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-gray-50/50 transition-colors group gap-4 ${member.status === 'Pending' ? 'opacity-70' : ''}`}>
                           <div className="flex items-center gap-5">
-                            <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm ${member.role === 'Leader' ? 'bg-gray-900' : 'bg-gray-300'}`}>
+                            <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm ${member.role === 'Leader' ? 'bg-gray-900' : member.status === 'Pending' ? 'bg-gray-200 text-gray-400' : 'bg-gray-300'}`}>
                               {member.name.charAt(0)}
                             </div>
                             <div>
@@ -216,6 +250,9 @@ export default function MyTeamPage() {
                                 {member.role === 'Leader' && (
                                   <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Leader</span>
                                 )}
+                                {member.status === 'Pending' && (
+                                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 italic">Invited</span>
+                                )}
                               </div>
                               <p className="text-sm text-gray-500">{member.email}</p>
                               <p className="text-xs text-gray-400 mt-1">{member.university}</p>
@@ -223,7 +260,15 @@ export default function MyTeamPage() {
                           </div>
                           <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto pl-[4.25rem] sm:pl-0">
                             {currentUser.role === 'Leader' && member.id !== currentUser.id && (
-                              <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                              <div className="flex items-center gap-1 opacity-100 transition-opacity">
+                                {member.status === 'Pending' && (
+                                  <button 
+                                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                    title="Resend Invitation"
+                                  >
+                                    <RefreshIcon />
+                                  </button>
+                                )}
                                 <button 
                                   onClick={() => handlePromoteMember(member.id, member.name)}
                                   className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"

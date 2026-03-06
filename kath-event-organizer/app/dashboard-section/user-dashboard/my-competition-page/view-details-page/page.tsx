@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import UserSidebar from '../../../../src/component/user/sidebar';
 import UserHeader from '../../../../src/component/user/header';
@@ -27,10 +27,30 @@ const UsersIcon = () => (
 const SearchIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
 );
+const CheckCircleIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+);
+const ClockIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+);
+
+// Breadcrumb Component
+const Breadcrumbs = ({ competitionName }: { competitionName: string }) => (
+  <nav className="flex text-sm text-gray-500 mb-6 gap-2 items-center font-medium">
+    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d]">Dashboard</Link>
+    <span>/</span>
+    <Link href="/dashboard-section/user-dashboard/my-competition-page" className="hover:text-[#a68a2d]">My Competitions</Link>
+    <span>/</span>
+    <span className="text-gray-900 truncate max-w-[200px]">{competitionName}</span>
+  </nav>
+);
 
 export default function CompetitionDetailPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTeamsModalOpen, setIsTeamsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [teamSearchQuery, setTeamSearchQuery] = useState('');
 
   // Mock Data Lookup (Simulasi data statis untuk demo)
@@ -43,7 +63,7 @@ export default function CompetitionDetailPage() {
     timeline: [
       { title: "Registration Opens", date: "01 Jan 2026", completed: true },
       { title: "Technical Meeting", date: "15 Jan 2026", completed: true },
-      { title: "Submission Deadline", date: "20 Feb 2026", completed: false },
+      { title: "Submission Period", date: "20 Feb 2026", completed: false, active: true },
       { title: "Finalist Announcement", date: "01 Mar 2026", completed: false },
       { title: "Grand Final & Awarding", date: "10 Mar 2026", completed: false },
     ],
@@ -69,14 +89,33 @@ export default function CompetitionDetailPage() {
     team.name.toLowerCase().includes(teamSearchQuery.toLowerCase())
   );
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenModal = () => {
+    // Logika Flow: Jangan izinkan buka modal jika kompetisi sudah selesai
+    if (competition.status === "Finished") {
+      return;
+    }
+    setIsModalOpen(true);
+  };
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (!hasSubmitted) setSelectedFile(null);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
   const handleSubmitProject = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulasi proses upload
-    alert("Project submitted successfully!");
-    setIsModalOpen(false);
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsModalOpen(false);
+      setHasSubmitted(true);
+    }, 2000);
   };
 
   return (
@@ -88,20 +127,15 @@ export default function CompetitionDetailPage() {
 
         <main className="flex-1 overflow-y-auto p-6 md:p-10">
           <div className="max-w-6xl mx-auto">
-            {/* Back Button */}
-            <div className="mb-8">
-              <Link href="/dashboard-section/user-dashboard/my-competition-page" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                <ArrowLeftIcon />
-                <span className="ml-2">Back to My Competitions</span>
-              </Link>
-            </div>
+            <Breadcrumbs competitionName={competition.name} />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Main Content */}
               <div className="lg:col-span-2 space-y-8">
                 
                 {/* Header Card */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#a68a2d]/5 rounded-bl-full -mr-10 -mt-10"></div>
                   <div className="flex flex-wrap gap-3 mb-4">
                     <span className="bg-blue-50 text-blue-700 border border-blue-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                       {competition.category}
@@ -152,31 +186,83 @@ export default function CompetitionDetailPage() {
               {/* Right Column: Sidebar */}
               <div className="space-y-6">
                 {/* Action Card */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-6">
-                  <h3 className="font-bold text-gray-900 mb-2">Ready to Submit?</h3>
-                  <p className="text-sm text-gray-500 mb-6">Make sure you have checked all requirements before submitting your work.</p>
-                  <button 
-                    onClick={handleOpenModal}
-                    className="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/10 transition-all flex items-center justify-center gap-2"
-                  >
-                    <UploadCloudIcon />
-                    Submit Project
-                  </button>
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-md p-6 sticky top-6 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-[#a68a2d]"></div>
+                  {competition.status === "Finished" ? (
+                    <>
+                      <div className="flex items-center gap-2 text-green-600 mb-2">
+                        <CheckCircleIcon />
+                        <h3 className="font-bold">Competition Ended</h3>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-6">You can now download your participation certificate.</p>
+                      <button className="w-full py-4 bg-[#a68a2d] text-white font-bold rounded-xl shadow-lg shadow-[#a68a2d]/20 hover:bg-[#8e7526] transition-all">
+                        Download Certificate
+                      </button>
+                    </>
+                  ) : hasSubmitted ? (
+                    <>
+                      <div className="flex items-center gap-2 text-blue-600 mb-2">
+                        <CheckCircleIcon />
+                        <h3 className="font-bold">Submission Received</h3>
+                      </div>
+                      <div className="bg-blue-50 p-3 rounded-lg mb-6">
+                        <p className="text-[10px] font-bold text-blue-600 uppercase mb-1">Current File</p>
+                        <p className="text-xs font-medium text-blue-900 truncate">final_submission_v2_kath.pdf</p>
+                      </div>
+                      <button 
+                        onClick={handleOpenModal}
+                        className="w-full py-4 border-2 border-gray-900 text-gray-900 font-bold rounded-xl hover:bg-gray-900 hover:text-white transition-all flex items-center justify-center gap-2 group"
+                      >
+                        <UploadCloudIcon />
+                        Edit Submission
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="font-bold text-gray-900 mb-2">Ready to Submit?</h3>
+                      <div className="flex items-center gap-2 text-amber-600 mb-4 bg-amber-50 p-2 rounded-lg">
+                        <ClockIcon />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Ends in 12h : 45m : 02s</span>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-6">Check all requirements before submitting your work.</p>
+                      <button 
+                        onClick={handleOpenModal}
+                        className="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/10 transition-all flex items-center justify-center gap-2"
+                      >
+                        <UploadCloudIcon />
+                        Submit Now
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 {/* Timeline */}
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                   <h3 className="font-bold text-gray-900 mb-6">Timeline</h3>
                   <div className="relative pl-2">
-                    <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gray-100"></div>
-                    <div className="space-y-8">
-                      {competition.timeline.map((item, index) => (
-                        <div key={index} className="relative pl-8 group">
-                          <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 z-10 transition-colors ${item.completed ? 'bg-green-500 border-green-500' : 'bg-white border-gray-300'}`}></div>
-                          <h4 className={`text-sm font-bold ${item.completed ? 'text-gray-900' : 'text-gray-500'}`}>{item.title}</h4>
-                          <p className="text-xs text-gray-400 mt-1 font-medium">{item.date}</p>
-                        </div>
-                      ))}
+                    <div className="space-y-0">
+                      {competition.timeline.map((item, index) => {
+                        const isLast = index === competition.timeline.length - 1;
+                        return (
+                          <div key={index} className="relative pl-8 pb-8 group">
+                            {!isLast && (
+                              <div className={`absolute left-[7px] top-6 w-0.5 h-full transition-colors duration-500 ${item.completed ? 'bg-green-500' : 'bg-gray-100'}`}></div>
+                            )}
+                            <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 z-10 transition-all duration-300 ${
+                              item.completed ? 'bg-green-500 border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 
+                              (item as any).active ? 'bg-white border-[#a68a2d] ring-4 ring-[#a68a2d]/10' : 'bg-white border-gray-300'
+                            }`}>
+                              {item.completed && (
+                                <svg className="w-2.5 h-2.5 text-white mx-auto mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </div>
+                            <h4 className={`text-sm font-bold transition-colors ${item.completed || (item as any).active ? 'text-gray-900' : 'text-gray-400'}`}>{item.title}</h4>
+                            <p className="text-xs text-gray-400 mt-1 font-medium">{item.date}</p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -216,10 +302,13 @@ export default function CompetitionDetailPage() {
                   
                   <div className="divide-y divide-gray-100 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                     {filteredTeams.map((team) => (
-                      <div key={team.id} className="py-3 group">
-                        <h4 className="font-medium text-gray-600 group-hover:text-[#a68a2d] transition-colors text-sm truncate">
+                      <div key={team.id} className="py-3 group flex items-center justify-between">
+                        <h4 className="font-medium text-gray-600 group-hover:text-[#a68a2d] transition-colors text-sm truncate max-w-[140px]">
                           {team.name}
                         </h4>
+                        {team.name === "KATH Creative" && (
+                          <span className="text-[9px] bg-[#a68a2d]/10 text-[#a68a2d] px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Your Team</span>
+                        )}
                       </div>
                     ))}
                     {filteredTeams.length === 0 && (
@@ -257,15 +346,29 @@ export default function CompetitionDetailPage() {
             
             <form onSubmit={handleSubmitProject} className="p-8">
               <div className="mb-6">
-                <label className="block text-sm font-bold text-gray-900 mb-3">Upload Submission (PDF)</label>
-                <div className="border-2 border-dashed border-gray-200 rounded-xl p-10 flex flex-col items-center justify-center text-center hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer group">
-                  <div className="p-4 bg-gray-50 rounded-full mb-4 text-gray-400 group-hover:bg-white group-hover:text-gray-900 transition-colors shadow-sm">
-                    <UploadCloudIcon />
-                  </div>
-                  <p className="text-sm font-bold text-gray-900">Click to upload or drag and drop</p>
-                  <p className="text-xs text-gray-500 mt-1">PDF only (Max. 10MB)</p>
-                  <input type="file" accept=".pdf" className="hidden" />
-                </div>
+                <label className="block text-sm font-bold text-gray-900 mb-3">
+                  Upload Submission (PDF) <span className="text-red-500">*</span>
+                </label>
+                <label className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center text-center transition-all cursor-pointer group ${selectedFile ? 'border-green-500 bg-green-50/30' : 'border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}>
+                  {selectedFile ? (
+                    <div className="flex flex-col items-center">
+                      <div className="p-4 bg-green-500 text-white rounded-full mb-4 shadow-lg shadow-green-500/20">
+                        <CheckCircleIcon />
+                      </div>
+                      <p className="text-sm font-bold text-gray-900">{selectedFile.name}</p>
+                      <p className="text-xs text-gray-500 mt-1">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB • Click to change</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="p-4 bg-gray-50 rounded-full mb-4 text-gray-400 group-hover:bg-white group-hover:text-gray-900 transition-colors shadow-sm">
+                        <UploadCloudIcon />
+                      </div>
+                      <p className="text-sm font-bold text-gray-900">Click to upload or drag and drop</p>
+                      <p className="text-xs text-gray-500 mt-1">PDF only (Max. 10MB)</p>
+                    </>
+                  )}
+                  <input type="file" accept=".pdf" className="hidden" onChange={handleFileChange} />
+                </label>
               </div>
 
               <div className="mb-6">
@@ -277,11 +380,15 @@ export default function CompetitionDetailPage() {
               </div>
 
               <div className="flex gap-4">
-                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                <button type="button" disabled={isSubmitting} onClick={handleCloseModal} className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50">
                   Cancel
                 </button>
-                <button type="submit" className="flex-1 px-6 py-3 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/20 transition-all">
-                  Submit
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting || !selectedFile}
+                  className="flex-1 px-6 py-3 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-gray-900/20 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>

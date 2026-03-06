@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import UserSidebar from '../../../../src/component/user/sidebar';
 import UserHeader from '../../../../src/component/user/header';
 
@@ -22,9 +23,28 @@ const SearchIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
 );
 
-export default function HistoryPage() {
+// Breadcrumb Component untuk navigasi logis
+const Breadcrumbs = () => (
+  <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center font-medium">
+    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
+    <span>/</span>
+    <span className="text-gray-900">Activity History</span>
+  </nav>
+);
+
+function HistoryContent() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Mengatur tab aktif berdasarkan query parameter saat halaman dimuat
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    const validTabs = ['all', 'competitions', 'wins', 'certificates'];
+    if (tab && validTabs.includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   // Data dummy untuk riwayat aktivitas
   const historyItems = [
@@ -93,6 +113,7 @@ export default function HistoryPage() {
           <div className="max-w-4xl mx-auto">
             {/* Header Section */}
             <div className="mb-8">
+              <Breadcrumbs />
               <Link 
                 href="/dashboard-section/user-dashboard/my-profile-page" 
                 className="inline-flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-[#a68a2d] transition-colors mb-4 group"
@@ -253,5 +274,13 @@ export default function HistoryPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function HistoryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <HistoryContent />
+    </Suspense>
   );
 }
