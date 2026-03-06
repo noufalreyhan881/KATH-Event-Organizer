@@ -1,8 +1,9 @@
-import Navbar from "./src/component/navbar";
-import LatestNews from "./src/component/blog";
-import FAQSection from "./src/component/faq-section";
-import OurClients from "./src/component/our-clients-section";
-import Footer from "./src/component/footer";
+import Link from "next/link";
+import Navbar from "@/components/layout/navbar";
+import LatestNews from "@/features/blog/components/blog";
+import FAQSection from "@/components/marketing/FAQSection";
+import OurClientsSection from "@/features/portfolio/components/OurClientsSection";
+import Footer from "@/components/layout/footer";
 
 export default function Home() {
   return (
@@ -51,7 +52,7 @@ export default function Home() {
       
       <button className="border border-white/50 text-white px-10 py-4 backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-[#a68a2d] tracking-[0.2em] uppercase text-xs font-bold focus:outline-none">
         Konsultasi
-      </button>*
+      </button>
     </div>
   </div>
 
@@ -278,7 +279,7 @@ export default function Home() {
       </div>
 
       {/* "Click For More" Card (Last Item) */}
-      <a href="/portofolio-page" className="group h-[450px] w-full bg-white flex flex-col items-center justify-center cursor-pointer shadow-lg hover:bg-gray-50 transition-colors">
+      <Link href="/portofolio-page" className="group h-[450px] w-full bg-white flex flex-col items-center justify-center cursor-pointer shadow-lg hover:bg-gray-50 transition-colors">
         <div className="w-12 h-12 rounded-full border border-[#a68a2d] flex items-center justify-center mb-4 group-hover:bg-[#a68a2d] transition-all duration-300">
           {/* Arrow Icon */}
           <svg 
@@ -293,7 +294,7 @@ export default function Home() {
         <span className="text-[#a68a2d] text-xs font-bold uppercase tracking-widest">
           Click For More
         </span>
-      </a>
+      </Link>
 
     </div>
   </div>
@@ -401,7 +402,7 @@ export default function Home() {
 
       <FAQSection />
 
-      <OurClients />
+      <OurClientsSection />
 
       <Footer />
     </main>
