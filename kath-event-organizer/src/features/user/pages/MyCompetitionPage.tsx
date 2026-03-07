@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+import { DASHBOARD_ROUTES } from '@/config/routes';
+
 // Icons
 const SearchIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
@@ -20,7 +22,7 @@ const ArrowRightIcon = () => (
 // Breadcrumb Component untuk navigasi logis
 const Breadcrumbs = () => (
   <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center">
-    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d]">Dashboard</Link>
+    <Link href={DASHBOARD_ROUTES.USER} className="hover:text-[#a68a2d]">Dashboard</Link>
     <span>/</span>
     <span className="text-gray-900 font-medium">My Competitions</span>
   </nav>
@@ -175,7 +177,7 @@ export default function MyCompetitionPage() {
                 </div>
               ) : (
                 filteredCompetitions.map((comp) => (
-                <Link href="/dashboard-section/user-dashboard/my-competition-page/view-details-page" key={comp.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col h-full overflow-hidden">
+                <Link href={DASHBOARD_ROUTES.USER_COMPETITION_DETAIL(comp.id)} key={comp.id} className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col h-full overflow-hidden">
                   <div className={`h-40 w-full ${comp.image} flex items-center justify-center rounded-t-2xl relative overflow-hidden`}>
                     <div className="absolute inset-0 opacity-10 bg-current"></div>
                     <span className="font-bold text-lg opacity-80">{comp.category}</span>

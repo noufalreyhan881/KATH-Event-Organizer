@@ -5,7 +5,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { AuthContext } from '@/context/AuthContext';
+import AuthContext from '@/context/AuthContext';
 import { authService } from '../services';
 import { storage } from '@/lib/storage';
 import type { LoginRequest, RegisterRequest } from '../types';

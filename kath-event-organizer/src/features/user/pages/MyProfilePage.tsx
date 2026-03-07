@@ -1,5 +1,5 @@
-import React from 'react';
 import Link from 'next/link';
+import { DASHBOARD_ROUTES } from '@/config/routes';
 
 // Icons
 const EditIcon = () => (
@@ -50,7 +50,7 @@ export default function MyProfilePage() {
                   </div>
                   
                   <div className="flex gap-3 mb-1">
-                    <Link href="/dashboard-section/user-dashboard/my-profile-page/edit-profile-page" className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 border border-transparent rounded-xl text-sm font-bold text-white hover:bg-black transition-colors shadow-lg shadow-gray-900/20">
+                    <Link href={DASHBOARD_ROUTES.USER_PROFILE_EDIT} className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 border border-transparent rounded-xl text-sm font-bold text-white hover:bg-black transition-colors shadow-lg shadow-gray-900/20">
                       <EditIcon />
                       Edit Profile
                     </Link>
@@ -79,15 +79,15 @@ export default function MyProfilePage() {
 
                 {/* Stats Grid - Clickable Links */}
                 <div className="grid grid-cols-3 gap-4 border-t border-gray-100 pt-6 mb-8">
-                  <Link href="/dashboard-section/user-dashboard/my-profile-page/history?tab=competitions" className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors block group cursor-pointer">
+                  <Link href={`${DASHBOARD_ROUTES.USER_PROFILE_HISTORY}?tab=competitions`} className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors block group cursor-pointer">
                     <span className="block text-3xl font-bold text-gray-900 mb-1 group-hover:text-[#a68a2d] transition-colors">{user.stats.competitions}</span>
                     <span className="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-600 transition-colors">Competitions</span>
                   </Link>
-                  <Link href="/dashboard-section/user-dashboard/my-profile-page/history?tab=wins" className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors border-l border-r border-gray-100 block group cursor-pointer">
+                  <Link href={`${DASHBOARD_ROUTES.USER_PROFILE_HISTORY}?tab=wins`} className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors border-l border-r border-gray-100 block group cursor-pointer">
                     <span className="block text-3xl font-bold text-gray-900 mb-1 group-hover:text-[#a68a2d] transition-colors">{user.stats.wins}</span>
                     <span className="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-600 transition-colors">Wins</span>
                   </Link>
-                  <Link href="/dashboard-section/user-dashboard/my-profile-page/history?tab=certificates" className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors block group cursor-pointer">
+                  <Link href={`${DASHBOARD_ROUTES.USER_PROFILE_HISTORY}?tab=certificates`} className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors block group cursor-pointer">
                     <span className="block text-3xl font-bold text-gray-900 mb-1 group-hover:text-[#a68a2d] transition-colors">{user.stats.certificates}</span>
                     <span className="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-600 transition-colors">Certificates</span>
                   </Link>

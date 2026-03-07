@@ -74,3 +74,12 @@ export const STORAGE_KEYS = {
   THEME: 'theme',
   LANGUAGE: 'language',
 } as const;
+
+export const storage = {
+  get: getStorageItem,
+  set: setStorageItem,
+  remove: removeStorageItem,
+  clear: clearStorage,
+  isAvailable: isStorageAvailable,
+  keys: STORAGE_KEYS,
+};

@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Icons
 const ArrowLeftIcon = () => (
@@ -14,6 +13,9 @@ const PlusIcon = () => (
 
 export default function CreateTeamPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     teamName: '',
@@ -65,19 +67,33 @@ export default function CreateTeamPage() {
     // Simulasi API call
     setTimeout(() => {
       setIsLoading(false);
-      alert(`Team "${formData.teamName}" created successfully!`);
-      router.push('/dashboard-section/user-dashboard/my-team-page');
+      
+      const competitionName = formData.competition; // Mengambil nama kompetisi dari form
+      const teamName = formData.teamName;
+
+      // Redirect to the success page with query parameters
+      const successUrl = `/competitions/register-success?teamName=${encodeURIComponent(teamName)}&competitionName=${encodeURIComponent(competitionName)}`;
+      router.push(successUrl);
+
     }, 1500); // 1.5 detik delay
+  };
+
+  const handleBack = () => {
+    if (redirectUrl) {
+      router.push(redirectUrl);
+    } else {
+      router.push('/user/my-team-page/team-list');
+    }
   };
 
   return (
     <>
       <div className="max-w-2xl mx-auto">
             <div className="mb-8">
-              <Link href="/dashboard-section/user-dashboard/my-team-page/team-list" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
+              <button onClick={handleBack} className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
                 <ArrowLeftIcon />
-                <span className="ml-2">Back to Team List</span>
-              </Link>
+                <span className="ml-2">Back to Previous Page</span>
+              </button>
             </div>
 
             <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
@@ -134,12 +150,13 @@ export default function CreateTeamPage() {
                 </div>
 
                 <div className="pt-4 flex flex-col-reverse sm:flex-row gap-3">
-                  <Link
-                    href="/dashboard-section/user-dashboard/my-team-page/team-list"
+                  <button
+                    type="button"
+                    onClick={handleBack}
                     className="w-full flex items-center justify-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition-colors text-center"
                   >
                     Cancel
-                  </Link>
+                  </button>
                   <button 
                     type="submit" 
                     disabled={isLoading}

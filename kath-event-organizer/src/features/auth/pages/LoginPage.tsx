@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { PUBLIC_ROUTES } from '@/config/routes';
 
 // Icons
 const EyeIcon = () => (
@@ -90,7 +91,7 @@ export default function LoginPage() {
               <input type="checkbox" className="w-4 h-4 text-[#a68a2d] rounded border-gray-300 focus:ring-[#a68a2d]" />
               <span className="ml-2 text-black">Remember me</span>
             </label>
-            <Link href="/dashboard-section/form-section/forgot-password" className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
+            <Link href={PUBLIC_ROUTES.FORGOT_PASSWORD} className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
               Forgot password?
             </Link>
           </div>
@@ -111,7 +112,7 @@ export default function LoginPage() {
 
         <div className="mt-8 text-center text-sm text-gray-600">
           <p>Don't have an account?{' '}
-            <Link href="/dashboard-section/form-section/register" className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
+            <Link href={PUBLIC_ROUTES.REGISTER} className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
               Sign Up
             </Link>
           </p>

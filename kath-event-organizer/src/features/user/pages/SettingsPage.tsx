@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
+import { DASHBOARD_ROUTES } from '@/config/routes';
+
 // Icons
 const SaveIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -17,7 +19,7 @@ const BellIcon = () => (
 // Breadcrumb Component untuk navigasi logis
 const Breadcrumbs = () => (
   <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center font-medium">
-    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
+    <Link href={DASHBOARD_ROUTES.USER} className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
     <span>/</span>
     <span className="text-gray-900">Settings</span>
   </nav>

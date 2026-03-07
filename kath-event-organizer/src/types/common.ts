@@ -78,3 +78,11 @@ export interface Timestamps {
 export interface BaseEntity extends Timestamps {
   id: UUID;
 }
+
+/**
+ * Layout properties
+ */
+export interface LayoutProps<T = {}> {
+  children: React.ReactNode;
+  params?: T;
+}

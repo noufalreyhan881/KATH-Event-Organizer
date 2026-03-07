@@ -1,6 +1,11 @@
 import React from 'react';
 
-const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
+interface CategoryFilterProps {
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
+}
+
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ activeCategory, onCategoryChange }) => {
   // Daftar kategori sesuai teks pada gambar referensi
   const categories = [
     "All",

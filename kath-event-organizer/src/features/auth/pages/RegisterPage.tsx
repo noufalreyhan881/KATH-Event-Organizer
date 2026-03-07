@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { PUBLIC_ROUTES } from '@/config/routes';
 
 // Icons
 const EyeIcon = () => (
@@ -147,7 +148,7 @@ export default function RegisterPage() {
 
         <div className="mt-8 text-center text-sm text-gray-600">
           <p>Already have an account?{' '}
-            <Link href="/dashboard-section/form-section/login" className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
+            <Link href={PUBLIC_ROUTES.LOGIN} className="text-[#a68a2d] font-medium hover:text-[#8c7324] transition-colors">
               Sign In
             </Link>
           </p>

@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import BlogMainGrid from "@/features/blog/components/blog-main-grid";
-import BlogNewsHeader from "@/features-blog/components/blog-news-header";
+import BlogNewsHeader from "@/features/blog/components/blog-news-header";
 
 export default function BlogPage() {
   return (

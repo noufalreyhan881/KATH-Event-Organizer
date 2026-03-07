@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const OurTeam = () => {
   // Data dummy untuk 5 anggota tim sesuai gambar
@@ -30,9 +31,11 @@ const OurTeam = () => {
               {/* Foto Profil */}
               <div className="aspect-square w-full overflow-hidden mb-4 bg-gray-300">
                 {/* Ganti src dengan foto asli */}
-                <img 
-                  src={member.image} 
-                  alt={`Team Member ${index + 1}`} 
+                <Image
+                  src={member.image}
+                  alt={`Team Member ${index + 1}`}
+                  width={500}
+                  height={500}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>

@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { DASHBOARD_ROUTES } from '@/config/routes';
+
 // Icons
 const UsersIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -39,7 +41,7 @@ const RefreshIcon = () => (
 // Breadcrumb Component
 const Breadcrumbs = () => (
   <nav className="flex text-sm text-gray-500 mb-4 gap-2 items-center font-medium">
-    <Link href="/dashboard-section/user-dashboard" className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
+    <Link href={DASHBOARD_ROUTES.USER} className="hover:text-[#a68a2d] transition-colors">Dashboard</Link>
     <span>/</span>
     <span className="text-gray-900">My Team</span>
   </nav>
@@ -180,7 +182,7 @@ export default function MyTeamPage() {
                         <UsersIcon />
                       </div>
                       {currentUser.role === 'Leader' && (
-                        <Link href="/dashboard-section/user-dashboard/my-team-page/settings" className="p-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all">
+                        <Link href={DASHBOARD_ROUTES.USER_TEAM_SETTINGS(team.code)} className="p-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all">
                           <SettingsIcon />
                         </Link>
                       )}
@@ -292,10 +294,10 @@ export default function MyTeamPage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">No Team Found</h2>
                 <p className="text-gray-500 max-w-md text-center mb-10 text-lg">You haven't joined a team yet. Create your own squad or join an existing one to start competing.</p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md px-6">
-                  <Link href="/dashboard-section/user-dashboard/my-team-page/create-team" className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl transition-all shadow-lg shadow-gray-900/10">
+                  <Link href={DASHBOARD_ROUTES.USER_TEAM_CREATE} className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl transition-all shadow-lg shadow-gray-900/10">
                     <PlusIcon /> Create Team
                   </Link>
-                  <Link href="/dashboard-section/user-dashboard/my-team-page/team-list" className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-100 hover:border-gray-300 text-gray-700 font-bold rounded-xl transition-all">
+                  <Link href="#" className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-100 hover:border-gray-300 text-gray-700 font-bold rounded-xl transition-all">
                     <SearchIcon /> Find Team
                   </Link>
                 </div>
